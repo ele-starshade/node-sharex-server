@@ -10,20 +10,20 @@ const version = require('./package.json').version;
 const PORT = config.port;
 
 // Custom modules
-var logger = require('./logger.js');
-var response = require('./response.js');
-var middleware = require('./middleware.js');
+const logger = require('./logger.js');
+const response = require('./response.js');
+const middleware = require('./middleware.js');
 // Random string
-var randomString = require('random-string');
+const randomString = require('random-string');
 // Path
-var path = require('path');
+const path = require('path');
 
 // Filesystem
-var fs = require('fs');
+const fs = require('fs');
 // file-exists
-var fileExists = require('file-exists');
+const fileExists = require('file-exists');
 // Q promises/deferreds
-var Q = require('q');
+const Q = require('q');
 
 // Create uploads directory if it does not exists and local static files should be served
 if (config.useLocalStaticServe && !fs.existsSync(config.uploadDirectory)) {
@@ -32,8 +32,8 @@ if (config.useLocalStaticServe && !fs.existsSync(config.uploadDirectory)) {
 }
 
 // Express basic stuff
-var express = require('express');
-var app = express();
+const express = require('express');
+const app = express();
 
 // Static directory for files
 if (config.useLocalStaticServe) {
@@ -41,14 +41,14 @@ if (config.useLocalStaticServe) {
 }
 
 // body-parser middleware
-var bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 
 // express-fileupload middleware
-var fileUpload = require('express-fileupload');
+const fileUpload = require('express-fileupload');
 app.use(fileUpload({
     safeFileNames: true,
     preserveExtension: true,
@@ -70,15 +70,15 @@ app.post('/upload', middleware.keyRequired, function (req, res) {
         response.noFileUploaded(res);
     } else {
         // File was uploaded
-        var file = req.files.file;
+        const file = req.files.file;
 
         // Generate a unique path (so it will not conflict with any existing files named the same)
-        var getUniqueFilepathDeferred = Q.defer();
-        var fileExtension = path.extname(file.name);
+        const getUniqueFilepathDeferred = Q.defer();
+        const fileExtension = path.extname(file.name);
 
-        var tryNewRandomString = function () {
-            var newFileName = randomString({ length: config.fileNameLength }) + fileExtension;
-            var uploadPath = path.join(config.uploadDirectory, newFileName);
+        const tryNewRandomString = function () {
+            const newFileName = randomString({ length: config.fileNameLength }) + fileExtension;
+            const uploadPath = path.join(config.uploadDirectory, newFileName);
 
             fileExists(uploadPath).then(function (doesFileExist) {
                 if (doesFileExist) {
@@ -123,8 +123,8 @@ app.get('/delete', middleware.keyRequired, function (req, res) {
         response.responseFileNameIsEmpty(res);
     } else {
         // Generate file informations
-        var fileName = req.query.filename;
-        var filePath = path.join(config.uploadDirectory, fileName);
+        const fileName = req.query.filename;
+        const filePath = path.join(config.uploadDirectory, fileName);
         logger.info('Trying to delete ' + fileName + ' (' + req.locals.shortKey + ')');
 
         // Check if file exists
@@ -156,12 +156,12 @@ app.get('/delete', middleware.keyRequired, function (req, res) {
 });
 
 // based on whether or not SSL is enabled, run http or https web server
-var server;
+let server;
 if (!config.ssl.useSSL) {
-    var http = require('http');
+    const http = require('http');
     server = http.createServer(app);
 } else {
-    var https = require('https');
+    const https = require('https');
     server = https.createServer({
         key: fs.readFileSync(config.ssl.privateKeyPath, 'utf8'),
         cert: fs.readFileSync(config.ssl.certificatePath, 'utf8')

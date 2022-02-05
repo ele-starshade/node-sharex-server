@@ -1,23 +1,23 @@
 // Console colors
-var colors = require('colors');
+const colors = require('colors');
 
 // [INFO] console out
-var info = function (message) {
+const info = function (message) {
     console.log(colors.cyan('[INFO]'), message);
 }
 
 // [ERROR] console out
-var error = function (message) {
+const error = function (message) {
     console.log(colors.red('[ERROR]'), message);
 }
 
 // [SUCCESS] console out
-var success = function (message) {
+const success = function (message) {
     console.log(colors.green('[SUCCESS]'), message);
 }
 
 // [AUTH] console out
-var auth = function (message) {
+const auth = function (message) {
     console.log(colors.yellow('[AUTH]'), message);
 }
 

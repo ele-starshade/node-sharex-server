@@ -5,7 +5,7 @@ const config = require('./config.json');
 const keys = config.keys;
 
 module.exports.keyRequired = function (req, res, next) {
-    var key = null;
+    let key = null;
 
     if (req.body.key) {
         key = req.body.key;
@@ -16,8 +16,6 @@ module.exports.keyRequired = function (req, res, next) {
         return;
     }
 
-    // Check if key is registered
-    var key = req.body.key;
     if (keys.indexOf(key) == -1) {
         logger.auth('Failed authentication with key ' + key);
         response.invalidKey(res);
